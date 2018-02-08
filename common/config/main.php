@@ -37,6 +37,9 @@ return [
         'gridview' => [
                'class' => '\kartik\grid\Module'
         ],
+        'elder' => [
+            'class' => 'frontend\modules\elder\Elder',
+        ],
     ]
        //...
 ];
