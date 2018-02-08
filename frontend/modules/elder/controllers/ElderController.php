@@ -11,6 +11,12 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use yii\helpers\Html;
 
+use yii\helpers\Json;
+use common\models\Cchangwat;
+use common\models\Campur;
+use common\models\Ctambon;
+use common\models\Chospital;
+
 /**
  * ElderController implements the CRUD actions for Elder model.
  */
@@ -29,7 +35,22 @@ class ElderController extends Controller
                     'bulk-delete' => ['post'],
                 ],
             ],
+            //-----------------------------------------------
+
+            //-----------------------------------------------
         ];
+    }
+
+    public function actionTest()
+    {    
+        $searchModel = new ElderSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('test', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            //'model' => $dataProvider
+        ]);
     }
 
     /**
@@ -267,5 +288,53 @@ class ElderController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+    
+    //----------------------------------------------------
+    public function actionGetAmphur() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $province_id = $parents[0];
+                $out = $this->getAmphur($province_id);
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionGetDistrict() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $ids = $_POST['depdrop_parents'];
+            $province_id = empty($ids[0]) ? null : $ids[0];
+            $amphur_id = empty($ids[1]) ? null : $ids[1];
+            if ($province_id != null) {
+               $data = $this->getDistrict($amphur_id);      
+               echo Json::encode(['output'=>$data, 'selected'=>'']);
+               return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    protected function getAmphur($id){
+        $datas = Amphur::find()->where(['changwatcode'=>$id])->all(); 
+        return $this->MapData($datas,'ampurcode','ampurname');
+    }
+
+    protected function getDistrict($id){
+        $datas = District::find()->where(['ampurcode'=>$id])->all(); 
+        return $this->MapData($datas,'tamboncode','tambonname');
+    }
+
+    protected function MapData($datas,$fieldId,$fieldName){
+        $obj = [];
+        foreach ($datas as $key => $value) {
+            array_push($obj, ['id'=>$value->{$fieldId},'name'=>$value->{$fieldName}]);
+        }
+        return $obj;
     }
 }

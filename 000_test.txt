@@ -1,4 +1,4 @@
-…or create a new repository on the command line
+ï¿½or create a new repository on the command line
 
 echo "# elderApp" >> README.md
 git init
@@ -9,8 +9,10 @@ git push -u origin master
 
 
 
-…or push an existing repository from the command line
+ï¿½or push an existing repository from the command line
 
 git remote add origin https://github.com/odevtheair/elderApp.git
 git push -u origin master
 
+https://github.com/dektrium/yii2-user/blob/0.9.12/docs/README.md
+https://github.com/dimpled/Yii2-Learning/blob/master/tutorial/dependent-dropdown.md

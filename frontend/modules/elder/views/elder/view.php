@@ -11,6 +11,10 @@ use yii\widgets\DetailView;
         'model' => $model,
         'attributes' => [
             'cid',
+            [
+                'label' => 'ชื่อ-สกุล',
+                'value' => $model->person->NAME." ".$model->person->LNAME, // function relation , field relation
+            ],
             'latitude',
             'longitude',
             'house',
